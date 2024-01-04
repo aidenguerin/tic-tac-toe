@@ -1,0 +1,80 @@
+* {
+    margin: 0px;
+}
+
+:root {
+    --clr-neutral-200: #f3f3f3;
+    --clr-neutral-300: #d4d4d4;
+    --clr-neutral-400: #e6e6e6;
+    --clr-warning-200: #e9705543;
+    --clr-warning-400: #e970556c; 
+    --clr-success-200: #28b61ca1;
+    --clr-success-400: #179c0ba1;
+}
+
+html {
+    font-family: 'Permanent Marker', cursive;
+}
+
+body {
+    background-color: var(--clr-neutral-200);
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
+.scores {
+    display: flex;
+    gap: 60px;
+    margin: 50px;
+}
+
+.scores > div {
+    font-size: 2rem;
+    padding: 5px 30px;
+    border-radius: 40px;
+    box-shadow: 0px 0px 10px 0px var(--clr-neutral-400);
+}
+
+.scores > .player-turn {
+    background-color: var(--clr-warning-400);
+    box-shadow: 0px 0px 10px 5px var(--clr-warning-200);
+}
+
+.gameboard {
+    --cell-size: 100px;
+    display: grid;
+    grid-template-rows: repeat(3, var(--cell-size));
+    grid-template-columns: repeat(3, var(--cell-size));
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+}
+
+.gameboard > .win {
+    background-color: var(--clr-success-400);
+    box-shadow: 0px 0px 10px 2px var(--clr-success-200);
+}
+
+.cell {
+    background-color: var(--clr-neutral-400);
+    height: var(--cell-size);
+    width: var(--cell-size);
+    border-radius: 15px;
+    justify-self: center;
+    text-align: center;
+    line-height: var(--cell-size);
+    font-size: 2.5rem;
+}
+
+.cell:hover {
+    box-shadow: 0px 0px 5px 5px var(--clr-neutral-300);
+    cursor: pointer;
+}
+
+
