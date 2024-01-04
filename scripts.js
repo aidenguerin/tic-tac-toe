@@ -74,14 +74,16 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
     };
 
     const checkWin = () => {
-        // win function 
+
     }
 
     const playRound = (row, column) => {
         console.log(`Adding ${getActivePlayer().name}'s token to cell [${row}, ${column}]`)
         board.placeToken(row, column, getActivePlayer().token);
 
-        checkWin();
+        // if (checkWin()) {
+        //     return true;
+        // }
         
         switchPlayerTurn();
         printNewRound();
@@ -136,7 +138,7 @@ function DisplayController() {
 
     function clickHandler(e) {
         const cellDiv = e.target;
-        if (!cellDiv) { // did not click on cell
+        if (!cellDiv) { // check if clicked on cell, not gap
             return
         }
 
@@ -152,11 +154,41 @@ function DisplayController() {
         scoresDiv.innerHTML = "";
     }
 
-    // add click handler to buttons
     gameboardDiv.addEventListener('click', (e) => clickHandler(e))
 
-    // initial render
-    updateDisplay();
+    updateDisplay(); // initial render
+}
+
+function Solver(board) {
+    const board = board;
+    const rows = board.lenth;
+    const columns = board[0].length;
+
+    const isRowWon = () => {
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < column; j++)
+                board[i][j] 
+        }
+    }
+
+    const isColWon = () => {
+
+    }
+
+    const isMainDiagWon = () => {
+
+    }
+
+    const isAntiDiagWon = () => {
+
+    }
+
+    const checkWin = () => {
+        // win function - return {win: bool, cells: arr[]}
+
+    }
+
+    return {checkWin}
 }
 
 const displayController = DisplayController();
