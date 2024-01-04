@@ -73,10 +73,6 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
         console.log(`${getActivePlayer().name}'s turn.`)
     };
 
-    const checkWin = () => {
-
-    }
-
     const playRound = (row, column) => {
         console.log(`Adding ${getActivePlayer().name}'s token to cell [${row}, ${column}]`)
         board.placeToken(row, column, getActivePlayer().token);
@@ -159,20 +155,33 @@ function DisplayController() {
     updateDisplay(); // initial render
 }
 
-function Solver(board) {
-    const board = board;
+function Solver(gameboard) {
+    const board = gameboard;
     const rows = board.lenth;
     const columns = board[0].length;
 
     const isRowWon = () => {
-        for (let i = 0; i < rows; i++) {
-            for (let j = 0; j < column; j++)
-                board[i][j] 
-        }
+        board.forEach((row, i) => {
+            countMap = {};
+            row.forEach((cell) => {
+                val = cell.getValue();
+                countMap[val] = (countMap[val] || 0) + 1;
+            });
+            
+            for (var val in countMap) {
+                if (val == 0) {
+                    continue
+                }
+                if (val == 3) {
+                    return i
+                }
+            }
+        });
+        return -1;
     }
 
     const isColWon = () => {
-
+        
     }
 
     const isMainDiagWon = () => {
@@ -188,7 +197,7 @@ function Solver(board) {
 
     }
 
-    return {checkWin}
+    return {checkWin, isRowWon}
 }
 
 const displayController = DisplayController();
