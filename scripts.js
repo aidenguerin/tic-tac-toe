@@ -24,7 +24,11 @@ function Gameboard() {
         console.log(boardWithCellValues);
     }
 
-    return {getBoard, placeToken, printBoard}
+    const resetBoard = () => {
+        board = [];
+    }
+
+    return {getBoard, placeToken, printBoard, resetBoard}
 }
 
 function Cell() {
@@ -84,3 +88,60 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
 
     return {playRound, getActivePlayer, getBoard: board.getBoard};
 }
+
+function DisplayController() {
+    const game = GameController();
+    const gameboardDiv = document.querySelector(".gameboard")
+    const scoresDiv = document.querySelector(".scores")
+
+    const updateDisplay = () => {
+        clearDisplay();
+
+        const board = game.getBoard();
+        const activePlayer = game.getActivePlayer();
+
+        // render cells 
+        board.forEach((row, i) => {
+            row.forEach((cell, j) => {
+                const cellDiv = document.createElement("div");
+                cellDiv.classList.add("cell");
+                cellDiv.dataset.row =  i;
+                cellDiv.dataset.column = j;
+
+                switch (cell.getValue()) {
+                    case 0: break;
+                    case 1: cellDiv.innerText = "x"; break;
+                    case 2: cellDiv.innerText = "o"; break;
+                    default: break;
+                }
+
+                gameboardDiv.appendChild(cellDiv);
+            });
+        });
+    }  
+
+    function clickHandler(e) {
+        const cellDiv = e.target;
+        if (!cellDiv) { // did not click on cell
+            return
+        }
+
+        const row = cellDiv.dataset.row; 
+        const column = cellDiv.dataset.column;
+
+        game.playRound(row, column);
+        updateDisplay();
+    } 
+
+    const clearDisplay = () => {
+        gameboardDiv.innerHTML = "";
+    }
+
+    // add click handler to buttons
+    gameboardDiv.addEventListener('click', (e) => clickHandler(e))
+
+    // initial render
+    updateDisplay();
+}
+
+const displayController = DisplayController();
