@@ -65,6 +65,7 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
         activePlayer = activePlayer === players[0] ? players[1] : players[0]; 
     };
 
+    const getPlayers = () => players;
     const getActivePlayer = () => activePlayer;
 
     const printNewRound = () => {
@@ -86,7 +87,7 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
         printNewRound();
     };
 
-    return {playRound, getActivePlayer, getBoard: board.getBoard};
+    return {playRound, getActivePlayer, getBoard: board.getBoard, getPlayers};
 }
 
 function DisplayController() {
@@ -98,7 +99,20 @@ function DisplayController() {
         clearDisplay();
 
         const board = game.getBoard();
+        const players = game.getPlayers();
         const activePlayer = game.getActivePlayer();
+
+        // render scoreboard
+        players.forEach(player => {
+           const playerScoreDiv = document.createElement("div");
+           playerScoreDiv.innerText = `${player.name}`;
+
+           if (player === activePlayer) {
+            playerScoreDiv.classList.add("active-player");
+           }
+
+           scoresDiv.appendChild(playerScoreDiv)
+        });
 
         // render cells 
         board.forEach((row, i) => {
@@ -135,6 +149,7 @@ function DisplayController() {
 
     const clearDisplay = () => {
         gameboardDiv.innerHTML = "";
+        scoresDiv.innerHTML = "";
     }
 
     // add click handler to buttons
