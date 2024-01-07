@@ -12,6 +12,10 @@ function Gameboard() {
 
     const getBoard = () => board;
 
+    const getCellToken = (row, column) => {
+        return board[row][column].getValue();
+    }
+
     const placeToken = (row, column, player) => {
         if (!board[row][column].getValue() == 0) {
             throw new Error('Cell is taken');
@@ -24,11 +28,7 @@ function Gameboard() {
         console.log(boardWithCellValues);
     }
 
-    const resetBoard = () => {
-        board = [];
-    }
-
-    return {getBoard, placeToken, printBoard, resetBoard}
+    return {getBoard, placeToken, printBoard, getCellToken}
 }
 
 function Cell() {
@@ -59,33 +59,75 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
         }
     ]
 
-    let activePlayer = players[0];
+    const getPlayers = () => players;
+    const getActivePlayer = () => activePlayer;
+    
+    let activePlayer = players[0]; // set inital player turn as player 1
+    let winningCoordinates = [];
+
+    const getWinningCoordinates = () => {
+        return winningCoordinates;
+    }
 
     const switchPlayerTurn = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0]; 
     };
-
-    const getPlayers = () => players;
-    const getActivePlayer = () => activePlayer;
 
     const printNewRound = () => {
         board.printBoard();
         console.log(`${getActivePlayer().name}'s turn.`)
     };
 
+    const checkThreeInARow = () => {
+        // Check rows
+        for (let i = 0; i < 3; i++) {
+            if (board.getCellToken(i, 0) === board.getCellToken(i, 1) &&
+                board.getCellToken(i, 1) === board.getCellToken(i, 2) &&
+                board.getCellToken(i, 0) !== 0) {
+                return [[i, 0], [i, 1], [i, 2]];
+            }
+        }
+    
+        // Check columns
+        for (let j = 0; j < 3; j++) {
+            if (board.getCellToken(0, j) === board.getCellToken(1, j) &&
+                board.getCellToken(1, j) === board.getCellToken(2, j) &&
+                board.getCellToken(0, j) !== 0) {
+                return [[0, j], [1, j], [2, j]];
+            }
+        }
+    
+        // Check diagonals
+        if (board.getCellToken(0, 0) === board.getCellToken(1, 1) &&
+            board.getCellToken(1, 1) === board.getCellToken(2, 2) &&
+            board.getCellToken(0, 0) !== 0) {
+            return [[0, 0], [1, 1], [2, 2]];
+        }
+    
+        if (board.getCellToken(0, 2) === board.getCellToken(1, 1) &&
+            board.getCellToken(1, 1) === board.getCellToken(2, 0) &&
+            board.getCellToken(0, 2) !== 0) {
+            return [[0, 2], [1, 1], [2, 0]];
+        }
+    
+        // No winner
+        return [];
+    } 
+    
     const playRound = (row, column) => {
         console.log(`Adding ${getActivePlayer().name}'s token to cell [${row}, ${column}]`)
         board.placeToken(row, column, getActivePlayer().token);
 
-        // if (checkWin()) {
-        //     return true;
-        // }
+        winningCoordinates = checkThreeInARow();
+        if (winningCoordinates.length > 0) {
+            console.log(`winning coordinates : ${winningCoordinates}`)
+        }
         
         switchPlayerTurn();
         printNewRound();
     };
 
-    return {playRound, getActivePlayer, getBoard: board.getBoard, getPlayers};
+    return {playRound, getActivePlayer, getBoard: board.getBoard, getPlayers, getWinningCoordinates};
 }
 
 function DisplayController() {
@@ -117,6 +159,7 @@ function DisplayController() {
             row.forEach((cell, j) => {
                 const cellDiv = document.createElement("div");
                 cellDiv.classList.add("cell");
+
                 cellDiv.dataset.row =  i;
                 cellDiv.dataset.column = j;
 
@@ -153,51 +196,6 @@ function DisplayController() {
     gameboardDiv.addEventListener('click', (e) => clickHandler(e))
 
     updateDisplay(); // initial render
-}
-
-function Solver(gameboard) {
-    const board = gameboard;
-    const rows = board.lenth;
-    const columns = board[0].length;
-
-    const isRowWon = () => {
-        board.forEach((row, i) => {
-            countMap = {};
-            row.forEach((cell) => {
-                val = cell.getValue();
-                countMap[val] = (countMap[val] || 0) + 1;
-            });
-            
-            for (var val in countMap) {
-                if (val == 0) {
-                    continue
-                }
-                if (val == 3) {
-                    return i
-                }
-            }
-        });
-        return -1;
-    }
-
-    const isColWon = () => {
-        
-    }
-
-    const isMainDiagWon = () => {
-
-    }
-
-    const isAntiDiagWon = () => {
-
-    }
-
-    const checkWin = () => {
-        // win function - return {win: bool, cells: arr[]}
-
-    }
-
-    return {checkWin, isRowWon}
 }
 
 const displayController = DisplayController();
