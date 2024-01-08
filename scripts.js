@@ -3,12 +3,14 @@ function Gameboard() {
     const columns = 3;
     const board = [];
 
-    for (let i = 0; i < rows; i++) {
-        board[i] = [];
-        for (let j = 0; j < columns; j++) {
-            board[i].push(Cell());
+    const initialiseBoard = () => {
+        for (let i = 0; i < rows; i++) {
+            board[i] = [];
+            for (let j = 0; j < columns; j++) {
+                board[i].push(Cell());
+            }
         }
-    }
+    } 
 
     const getBoard = () => board;
 
@@ -28,7 +30,20 @@ function Gameboard() {
         console.log(boardWithCellValues);
     }
 
-    return {getBoard, placeToken, printBoard, getCellToken}
+    const clearBoard = () => {
+        while (board.length > 0) {
+            board.pop();
+        }
+    }
+
+    const resetBoard = () => {
+        clearBoard();
+        initialiseBoard();
+    }
+
+    initialiseBoard(); // initial board
+
+    return {getBoard, placeToken, printBoard, getCellToken, resetBoard}
 }
 
 function Cell() {
