@@ -65,9 +65,9 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
     let activePlayer = players[0]; // set inital player turn as player 1
     let winningCoordinates = [];
 
-    const getWinningCoordinates = () => {
-        return winningCoordinates;
-    }
+    const isWinningCell = (row, column) => {
+        return winningCoordinates.some(coordinate => coordinate[0] === row && coordinate[1] === column);
+    }  
 
     const switchPlayerTurn = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0]; 
@@ -127,7 +127,7 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
         printNewRound();
     };
 
-    return {playRound, getActivePlayer, getBoard: board.getBoard, getPlayers, getWinningCoordinates};
+    return {playRound, getActivePlayer, getBoard: board.getBoard, getPlayers, isWinningCell};
 }
 
 function DisplayController() {
@@ -162,6 +162,10 @@ function DisplayController() {
 
                 cellDiv.dataset.row =  i;
                 cellDiv.dataset.column = j;
+
+                if (game.isWinningCell(i,j)) {
+                    cellDiv.classList.add("win")
+                }
 
                 switch (cell.getValue()) {
                     case 0: break;
