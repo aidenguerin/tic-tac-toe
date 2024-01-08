@@ -142,13 +142,20 @@ function GameController(playerOneName = "Player One", playerTwoName = "Player Tw
         printNewRound();
     };
 
-    return {playRound, getActivePlayer, getBoard: board.getBoard, getPlayers, isWinningCell};
+    const newGame = () => {
+        board.resetBoard();
+        activePlayer = players[0]; // set inital player turn as player 1
+        winningCoordinates = [];
+    }
+
+    return {playRound, getActivePlayer, getBoard: board.getBoard, getPlayers, isWinningCell, newGame};
 }
 
 function DisplayController() {
     const game = GameController();
     const gameboardDiv = document.querySelector(".gameboard")
     const scoresDiv = document.querySelector(".scores")
+    const resetBtn = document.querySelector(".reset-btn")
 
     const updateDisplay = () => {
         clearDisplay();
@@ -212,7 +219,13 @@ function DisplayController() {
         scoresDiv.innerHTML = "";
     }
 
+    const resetDisplay = () => {
+        game.newGame();
+        updateDisplay();
+    }
+
     gameboardDiv.addEventListener('click', (e) => clickHandler(e))
+    resetBtn.addEventListener('click', () => resetDisplay())
 
     updateDisplay(); // initial render
 }
