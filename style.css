@@ -77,4 +77,15 @@ body {
     cursor: pointer;
 }
 
+.reset-btn {
+    font-size: 1rem;
+    margin-top: 2rem;
+    padding: 5px 30px;
+    border-radius: 40px;
+    box-shadow: 0px 0px 10px 0px var(--clr-neutral-400);
+}
 
+.reset-btn:hover {
+    cursor: pointer;
+    box-shadow: 0px 0px 5px 5px var(--clr-warning-200);
+}
